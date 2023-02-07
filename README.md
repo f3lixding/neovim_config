@@ -61,6 +61,27 @@ Some important packages are:
 Using rust-tools is probably the easiest thing to do here: https://github.com/simrat39/rust-tools.nvim
 Note that you should not call `lsp['rust_analyzer'].setup` once you have used this. It will override it. 
 
+##### ccls
+There is a guide here: https://jdhao.github.io/2020/11/29/neovim_cpp_dev_setup/
+
+Some stuff to install beforehand (all of which can be done via brew):
+	- ccls
+	- cmake
+	- clang (this is probably installed via brew)
+	- llvm (this is also probably installed via brew)
+
+On Mac the server would have trouble finding std library. This is because it would attempt to look for these include files in `/usr/include`, which no longer exists. Instead do the following:
+```bash
+g++ -E -x c++ - -v < /dev/null
+```
+This will output the include directories that are sourced by the g++. 
+
+To resolve this issue of not being able to find the right header file on mac, do the following:
+	- `mkdir build` and `cd build` and generate make files with `-DCMAKE_EXPORT_COMPILE_COMMANDS=1` to generate `compile_commands.json`
+	- include `compilationDatabaseDirectory` as specified [here](https://github.com/MaskRay/ccls/wiki/Customization#compilationdatabasedirectory) in init_options
+	- include `clang.extraArgs` as specified [here](https://github.com/MaskRay/ccls/issues/191#issuecomment-453809905) in init_options
+	- initialize at the project root by running `ccls --index .` (this allows for information to perform some actions such as hovering)
+
 ## Setting up Telescope
 The main github page is actually quite clear on what there is to do: https://github.com/nvim-telescope/telescope.nvim
 

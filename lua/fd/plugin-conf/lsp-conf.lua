@@ -34,7 +34,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- listing servers
-local servers = { 'rust_analyzer', 'sumneko_lua' }
+local servers = { 'rust_analyzer', 'sumneko_lua', 'ccls' }
 
 -- prepare settings
 local gen_settings = function(server_name)
@@ -51,6 +51,22 @@ local gen_settings = function(server_name)
   end
 end
 
+-- prepare init options
+local gen_init_options = function(server_name)
+  if server_name == 'ccls' then
+    return {
+      cache = {
+        -- directory = "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include:/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include:/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks (framework directory)";
+        directory = ".ccls-cache"
+      },
+      clang = {
+        extraArgs = {"-isystem", "/Library/Developer/CommandLineTools/usr/include/c++/v1"}
+      },
+      compilationDatabaseDirectory = "./build"
+    }
+  end
+end
+
 -- calling setups
 local nvim_lsp_config = require('lspconfig')
 for _, lsp in ipairs(servers) do
@@ -61,7 +77,8 @@ for _, lsp in ipairs(servers) do
     nvim_lsp_config[lsp].setup {
       on_attach = on_attach,
       capabilities = capabilities,
-      settings = gen_settings(lsp)
+      settings = gen_settings(lsp),
+      init_options = gen_init_options(lsp)
     }
   end
 end
