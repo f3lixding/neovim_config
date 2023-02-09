@@ -5,7 +5,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
 
   -- appearance related
   Plug 'morhetz/gruvbox'
-  Plug 'nvim-tree/nvim-web-devicons' 
+  Plug 'nvim-tree/nvim-web-devicons'
   Plug 'nvim-tree/nvim-tree.lua'
   Plug 'nvim-tree/nvim-web-devicons'
 
@@ -18,6 +18,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'hrsh7th/cmp-vsnip' -- snipping engine
   Plug 'hrsh7th/vim-vsnip' -- also for snipping engine
   Plug 'hrsh7th/cmp-nvim-lsp-signature-help' -- for function signature info
+  Plug 'nvim-treesitter/nvim-treesitter'
 
   -- rust related
   Plug 'simrat39/rust-tools.nvim'
@@ -36,6 +37,7 @@ require("fd.plugin-conf.neovim-tree")
 require("fd.plugin-conf.lsp-conf")
 require("fd.plugin-conf.nvim-autopairs")
 require("fd.plugin-conf.telescope-conf")
+require("fd.plugin-conf.nvim-treesitter-conf")
 
 -- appearance settings
 vim.g.gruvbox_number_column = 'bg0'

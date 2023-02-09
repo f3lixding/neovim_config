@@ -2,7 +2,7 @@
 vim.cmd("source ~/.config/nvim/settings.vim")
 
 -- mappings
-vim.cmd('source ~/.config/nvim/mappings.vim') 
+vim.cmd('source ~/.config/nvim/mappings.vim')
 
 -- load plugin related configs
 require('fd')

@@ -82,6 +82,38 @@ To resolve this issue of not being able to find the right header file on mac, do
 	- include `clang.extraArgs` as specified [here](https://github.com/MaskRay/ccls/issues/191#issuecomment-453809905) in init_options
 	- initialize at the project root by running `ccls --index .` (this allows for information to perform some actions such as hovering)
 
+For cross platform compilation, you would run into some trouble. See https://github.com/MaskRay/ccls/issues/760. 
+
+Here are the extraArgs that made it work for me:
+```Lua
+        clang = {
+            extraArgs = {
+                "-isystem",
+                "/Library/Developer/CommandLineTools/usr/include/c++/v1",
+                "-isystem",
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1",
+                "-isystem",
+                "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include",
+                "-isystem",
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
+                "-isystem",
+                "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
+                "-isystem"
+                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
+            } -- https://github.com/MaskRay/ccls/issues/191#issuecomment-453809905
+        },
+```
+
+Some projects require cross compilation. Because ccls actually use clang (and not gcc), it would not really understand how to find some of the header files for some compilation targets. 
+In order to bypass that, include a `.ccls` in the project root directory that points to the include files:
+```
+%compile_commands.json -- this is to make sure %compile_commands.json is still sourced
+-isystem
+/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/lib/gcc/arm-none-eabi/10.3.1/include/
+-isystem
+/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/
+```
+
 ## Setting up Telescope
 The main github page is actually quite clear on what there is to do: https://github.com/nvim-telescope/telescope.nvim
 
