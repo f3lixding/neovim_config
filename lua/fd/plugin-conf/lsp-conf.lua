@@ -34,7 +34,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- listing servers
-local servers = { 'rust_analyzer', 'sumneko_lua', 'ccls' }
+local servers = { 'rust_analyzer', 'sumneko_lua', 'ccls', 'pyright' }
 
 -- prepare settings
 local gen_settings = function(server_name)

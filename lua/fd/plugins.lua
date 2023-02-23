@@ -44,4 +44,5 @@ require("fd.plugin-conf.nvim-treesitter-conf")
 vim.g.gruvbox_number_column = 'bg0'
 vim.g.gruvbox_sign_column = 'bg0'
 vim.g.gruvbox_vert_split = 'orange'
+vim.cmd("highlight link markdownError NONE")
 vim.cmd("colorscheme gruvbox")
