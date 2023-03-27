@@ -34,11 +34,11 @@ local on_attach = function(client, bufnr)
 end
 
 -- listing servers
-local servers = { 'rust_analyzer', 'sumneko_lua', 'ccls', 'pyright' }
+local servers = { 'rust_analyzer', 'lua_ls', 'ccls', 'pyright' }
 
 -- prepare settings
 local gen_settings = function(server_name)
-  if server_name == 'sumneko_lua' then
+  if server_name == 'lua_ls' then
     return {
         Lua = {
             diagnostics = {
