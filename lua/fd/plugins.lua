@@ -20,6 +20,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'hrsh7th/vim-vsnip' -- also for snipping engine
   Plug 'hrsh7th/cmp-nvim-lsp-signature-help' -- for function signature info
   Plug 'nvim-treesitter/nvim-treesitter'
+  Plug 'rmagatti/goto-preview' -- pop up go to definition
 
   -- rust related
   Plug 'simrat39/rust-tools.nvim'
@@ -31,6 +32,9 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-lua/plenary.nvim' -- required by telescope
 
+  -- AI assistant
+  Plug 'Exafunction/codeium.vim'
+
 vim.call('plug#end')
 
 -- invokes conf set ups
@@ -39,6 +43,8 @@ require("fd.plugin-conf.lsp-conf")
 require("fd.plugin-conf.nvim-autopairs")
 require("fd.plugin-conf.telescope-conf")
 require("fd.plugin-conf.nvim-treesitter-conf")
+require("fd.plugin-conf.codeium-conf")
+require("fd.plugin-conf.goto-preview-conf")
 
 -- appearance settings
 vim.g.gruvbox_number_column = 'bg0'
