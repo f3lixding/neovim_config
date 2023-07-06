@@ -30,3 +30,4 @@ set incsearch                                               " Set incremental se
 set scrolloff=8                                             " Gives a bit of breathing room for scrolling
 set signcolumn=yes                                          " Gives a dedicated column for linter messages
 set cursorline                                              " highlight current row
+set statusline=%<%f                                         " Gives the file more context
