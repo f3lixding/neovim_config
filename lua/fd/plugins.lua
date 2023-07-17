@@ -31,6 +31,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   -- telescope
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-lua/plenary.nvim' -- required by telescope
+  Plug 'ThePrimeagen/harpoon'
 
   -- AI assistant
   Plug 'Exafunction/codeium.vim'
@@ -45,6 +46,7 @@ require("fd.plugin-conf.telescope-conf")
 require("fd.plugin-conf.nvim-treesitter-conf")
 require("fd.plugin-conf.codeium-conf")
 require("fd.plugin-conf.goto-preview-conf")
+require("fd.plugin-conf.harpoon-conf")
 
 -- appearance settings
 vim.g.gruvbox_number_column = 'bg0'
