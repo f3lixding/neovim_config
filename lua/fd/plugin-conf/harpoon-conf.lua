@@ -15,3 +15,7 @@ vim.keymap.set("n", "<leader>nw", "<cmd>lua require('harpoon.ui').nav_prev()<CR>
 for i = 1, 9 do
   vim.keymap.set("n", "<leader>" .. i, "<cmd>lua require('harpoon.ui').nav_file(" .. i .. ")<CR>", {noremap=true})
 end
+
+require('telescope').load_extension('harpoon')
+
+vim.keymap.set("n", "<leader>fj", "<cmd>Telescope harpoon marks<CR>", {noremap=true})
