@@ -103,3 +103,6 @@ for _, lsp in ipairs(servers) do
     }
   end
 end
+
+-- autocommands for formatting 
+vim.cmd([[ autocmd BufWritePre *.rs :!rustfmt && cargo clippy ]])
