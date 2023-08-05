@@ -104,5 +104,12 @@ for _, lsp in ipairs(servers) do
   end
 end
 
--- autocommands for formatting 
-vim.cmd([[ autocmd BufWritePre *.rs :!rustfmt && cargo clippy ]])
+-- autocommands for formatting for rust
+function rustfmt()
+  local bufnr = vim.api.nvim_get_current_buf()
+  vim.api.nvim_command('write') -- Write the file first
+  vim.fn.system('rustfmt --edition 2021 ' .. vim.fn.fnameescape(vim.api.nvim_buf_get_name(bufnr)))
+  vim.api.nvim_command('edit') -- Reload the buffer
+end
+
+vim.cmd('autocmd BufWritePre *.rs lua rustfmt()')
