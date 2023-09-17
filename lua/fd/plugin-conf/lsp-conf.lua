@@ -34,7 +34,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- listing servers
-local servers = { 'rust_analyzer', 'lua_ls', 'ccls', 'pyright' }
+local servers = { 'rust_analyzer', 'lua_ls', 'clangd', 'pyright' }
 
 -- prepare settings
 local gen_settings = function(server_name)
@@ -51,55 +51,24 @@ local gen_settings = function(server_name)
   end
 end
 
--- prepare init options
-local gen_init_options = function(server_name)
-  if server_name == 'ccls' then
-    return {
-        cache = {
-            directory = ".ccls-cache"
-        },
-        clang = {
-            extraArgs = {
-                "-isystem",
-                "/Library/Developer/CommandLineTools/usr/include/c++/v1",
-                "-isystem",
-                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include/c++/v1",
-                "-isystem",
-                "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/14.0.0/include",
-                "-isystem",
-                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/include",
-                "-isystem",
-                "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
-                "-isystem",
-                "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks"
-                -- "-isystem",
-                -- "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/lib/gcc/arm-none-eabi/10.3.1/include/",
-                -- "-isystem",
-                -- "/opt/homebrew/Cellar/arm-none-eabi-gcc/10.3-2021.07/gcc/arm-none-eabi/include/"
-            } -- https://github.com/MaskRay/ccls/issues/191#issuecomment-453809905
-        },
-        highlight = {
-            lsRanges = true
-        },
-        compilationDatabaseDirectory = ""
-    }
-  else
-    return {}
-  end
-end
-
 -- calling setups
 local nvim_lsp_config = require('lspconfig')
 for _, lsp in ipairs(servers) do
   if lsp == 'rust_analyzer' then -- we use rust tools to configure rust_analyzer
     local rt_module = require('fd.plugin-conf.rust-tools-conf')
     rt_module.set_up_rust_tools(on_attach)
+  elseif lsp == 'clangd' then
+    nvim_lsp_config[lsp].setup {
+        on_attach = on_attach,
+        cmd = { "clangd", "--background-index" },
+        filetypes = { "c", "cpp", "objc", "objcpp" },
+        capabilities = capabilities,
+    }
   else
     nvim_lsp_config[lsp].setup {
         on_attach = on_attach,
         capabilities = capabilities,
         settings = gen_settings(lsp),
-        init_options = gen_init_options(lsp)
     }
   end
 end
