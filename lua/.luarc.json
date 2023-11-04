@@ -1,0 +1,7 @@
+{
+    "diagnostics.globals": [
+        "vim",
+        "rustfmt"
+    ],
+    "workspace.checkThirdParty": false
+}

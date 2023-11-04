@@ -9,10 +9,7 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local capabilities = require('fd.plugin-conf.nvim-cmp')
-local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-
+local on_attach = function(_, bufnr)
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -31,6 +28,18 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+
+  -- Set some keybinds conditional on server capabilities
+  if vim.lsp.inlay_hint then
+    vim.keymap.set(
+        'n',
+        '<leader>df',
+        function()
+          vim.lsp.inlay_hint(0, nil)
+        end,
+        { desc = 'Toggle Inlay Hints' }
+    )
+  end
 end
 
 -- listing servers
@@ -42,8 +51,14 @@ local gen_settings = function(server_name)
     return {
         Lua = {
             diagnostics = {
-                globals = { 'vim' } -- need this so the ls doesn't complain about the global variable of vim
-            }
+                -- Get the language server to recognize the `vim` global
+                globals = { 'vim' },
+            },
+            hint = { enable = true },
+            workspace = {
+                -- Make the server aware of Neovim runtime files to provide settings for `vim` API, etc.
+                library = vim.api.nvim_get_runtime_file("", true),
+            },
         }
     }
   else
