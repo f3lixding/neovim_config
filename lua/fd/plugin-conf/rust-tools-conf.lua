@@ -164,7 +164,7 @@ function M.set_up_rust_tools(on_attach_routine)
       -- standalone file support
       -- setting it to false may improve startup time
       standalone = true,
-      on_attach = on_attach_routine    
+      on_attach = on_attach_routine
     }, -- rust-analyzer options
 
     -- debugging stuff

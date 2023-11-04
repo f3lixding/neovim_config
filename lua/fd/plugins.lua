@@ -32,6 +32,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-lua/plenary.nvim' -- required by telescope
   Plug 'ThePrimeagen/harpoon'
+  Plug 'nvim-telescope/telescope-live-grep-args.nvim'
 
   -- AI assistant
   Plug 'Exafunction/codeium.vim'
