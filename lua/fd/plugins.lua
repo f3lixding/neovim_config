@@ -33,6 +33,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'nvim-lua/plenary.nvim' -- required by telescope
   Plug 'ThePrimeagen/harpoon'
   Plug 'nvim-telescope/telescope-live-grep-args.nvim'
+  Plug('nvim-telescope/telescope-fzf-native.nvim', { ['do'] = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' })
 
   -- AI assistant
   Plug 'Exafunction/codeium.vim'
