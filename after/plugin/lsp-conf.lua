@@ -8,7 +8,7 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local capabilities = require('after.plugin.nvim-cmp')
+local capabilities = require('fd.plugin-conf.nvim-cmp')
 local on_attach = function(_, bufnr)
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
@@ -70,7 +70,7 @@ end
 local nvim_lsp_config = require('lspconfig')
 for _, lsp in ipairs(servers) do
   if lsp == 'rust_analyzer' then -- we use rust tools to configure rust_analyzer
-    local rt_module = require('after.plugin.rust-tools-conf')
+    local rt_module = require('fd.plugin-conf.rust-tools-conf')
     rt_module.set_up_rust_tools(on_attach)
   elseif lsp == 'clangd' then
     nvim_lsp_config[lsp].setup {
