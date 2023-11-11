@@ -40,16 +40,6 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
 
 vim.call('plug#end')
 
--- invokes conf set ups
-require("fd.plugin-conf.neovim-tree")
-require("fd.plugin-conf.lsp-conf")
-require("fd.plugin-conf.nvim-autopairs")
-require("fd.plugin-conf.telescope-conf")
-require("fd.plugin-conf.nvim-treesitter-conf")
-require("fd.plugin-conf.codeium-conf")
-require("fd.plugin-conf.goto-preview-conf")
-require("fd.plugin-conf.harpoon-conf")
-
 -- appearance settings
 vim.g.gruvbox_number_column = 'bg0'
 vim.g.gruvbox_sign_column = 'bg0'
