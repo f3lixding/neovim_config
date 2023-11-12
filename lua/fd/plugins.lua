@@ -38,11 +38,14 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   -- AI assistant
   Plug 'Exafunction/codeium.vim'
 
+  -- Debugging
+  Plug 'mfussenegger/nvim-dap'
+  Plug 'rcarriga/nvim-dap-ui'
+
 vim.call('plug#end')
 
 -- appearance settings
 vim.g.gruvbox_number_column = 'bg0'
 vim.g.gruvbox_sign_column = 'bg0'
-vim.g.gruvbox_vert_split = 'orange'
 vim.cmd("highlight link markdownError NONE") -- this is to disable markdown syntax checking https://old.reddit.com/r/neovim/comments/jmuxm0/help_seeing_red_blocks_in_hover_definitions/
 vim.cmd("colorscheme gruvbox")
