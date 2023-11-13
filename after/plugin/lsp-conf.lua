@@ -1,3 +1,26 @@
+-- Border style
+local border_style = {
+    { "╭", "FloatBorder" },
+    { "─", "FloatBorder" },
+    { "╮", "FloatBorder" },
+    { "│", "FloatBorder" },
+    { "╯", "FloatBorder" },
+    { "─", "FloatBorder" },
+    { "╰", "FloatBorder" },
+    { "│", "FloatBorder" }
+}
+
+-- Hover pop up window customization
+vim.cmd [[ hi Pmenu ctermbg=NONE guibg=NONE ]]
+
+-- Overriding globally
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or border_style
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
+
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
