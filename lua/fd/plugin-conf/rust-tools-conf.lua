@@ -6,6 +6,8 @@ local codelldb_path = extension_path .. 'adapter/codelldb'
 local liblldb_path = extension_path .. 'lldb/lib/liblldb'
 local this_os = vim.loop.os_uname().sysname;
 liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib");
+M.dap = require('rust-tools.dap').get_codelldb_adapter(
+        codelldb_path, liblldb_path)
 
 function M.set_up_rust_tools(on_attach_routine)
   local rt = require("rust-tools")
@@ -183,8 +185,7 @@ function M.set_up_rust_tools(on_attach_routine)
       }, -- rust-analyzer options
       -- debugging stuff
       dap = {
-          adapter = require('rust-tools.dap').get_codelldb_adapter(
-            codelldb_path, liblldb_path),
+          adapter = M.dap
       },
   }
 
