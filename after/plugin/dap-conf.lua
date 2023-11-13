@@ -3,6 +3,8 @@ vim.keymap.set('n', '<leader>dd', require('dap').continue)
 vim.keymap.set('n', '<leader>db', require('dap').toggle_breakpoint)
 vim.keymap.set('n', '<leader>do', require('dap').step_over)
 vim.keymap.set('n', '<leader>di', require('dap').step_into)
+vim.keymap.set('n', '<leader>dx', require('dap').close)
+vim.keymap.set('n', '<leader>dc', require('dap').disconnect)
 
 -- Configs for attaching to process
 local dap = require('dap')
