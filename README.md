@@ -1,29 +1,39 @@
 # neovim_config
 ## Sources
-Good starting points:
+Good resources:
 - directory structure: https://www.reddit.com/r/neovim/comments/kwvuje/dumb_question_but_how_do_you_structure_the_neovim/
 - rust and nvim: https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/
 - rust analyzer set up: https://rust-analyzer.github.io/manual.html#vimneovim
+- rust-tools debugging info: https://github.com/simrat39/rust-tools.nvim/wiki/debugging 
+- nvim-dap process attachment set up: https://github.com/mfussenegger/nvim-dap/wiki/Cookbook
+- CodeLLDB: https://marketplace.visualstudio.com/items?itemName=vadimcn.vscode-lldb
 
 ## Directory Structure
 ```BASH
 ➜  nvim pwd
 /Users/felixding/.config/nvim
-➜  nvim tree
+➜  nvim tree -L 3 -I autoload/ -I plugged/
 .
-├── autoload
-│   └── plug.vim
+├── README.md
+├── after
+│   └── plugin <-- this constains modules that would be loaded _after_ initial set up is done _automatically_
+│       ├── codeium-conf.lua
+│       ├── dap-conf.lua
+│       ├── goto-preview-conf.lua
+│       ├── harpoon-conf.lua
+│       ├── lsp-conf.lua
+│       ├── neovim-tree.lua
+│       ├── nvim-autopairs.lua
+│       ├── nvim-treesitter-conf.lua
+│       └── telescope-conf.lua
 ├── init.lua
 ├── lua
 │   └── fd
 │       ├── init.lua
-│       ├── plugin-conf
-│       │   ├── lsp-conf.lua
-│       │   └── neovim-tree.lua
-│       └── plugins.lua
-├── mappings.vim <-- direct key mapping
-├── plugged <-- pluggin installation directory
-└── settings.vim <-- first citizen settings on nvim
+│       ├── plugin-conf <-- for modules that would be used / referenced in after/plugin/
+│       └── plugins.lua <-- for plugin declarations
+├── mappings.vim
+└── settings.vim
 ```
 
 ## Lsp set up
@@ -61,7 +71,7 @@ Some important packages are:
 Using rust-tools is probably the easiest thing to do here: https://github.com/simrat39/rust-tools.nvim
 Note that you should not call `lsp['rust_analyzer'].setup` once you have used this. It will override it. 
 
-##### ccls
+##### ccls (this is not currently used, clangd is used instead)
 There is a guide here: https://jdhao.github.io/2020/11/29/neovim_cpp_dev_setup/
 
 Some stuff to install beforehand (all of which can be done via brew):
