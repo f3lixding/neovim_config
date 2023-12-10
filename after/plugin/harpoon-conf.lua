@@ -18,4 +18,4 @@ end
 
 require('telescope').load_extension('harpoon')
 
-vim.keymap.set("n", "<leader>fj", "<cmd>Telescope harpoon marks<CR>", {noremap=true})
+vim.keymap.set("n", "<leader>fm", "<cmd>Telescope harpoon marks<CR>", {noremap=true})
