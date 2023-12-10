@@ -6,6 +6,7 @@ vim.keymap.set('n', '<leader>fs', builtin.lsp_document_symbols, { desc = "Find S
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 vim.keymap.set('n', '<leader>fl', builtin.current_buffer_fuzzy_find, { desc = "Current Buffer Fuzzy Find" })
+vim.keymap.set('n', '<leader>fj', ":Telescope commands<CR>", { desc = "Commands" })
 
 local actions = require "telescope.actions"
 
