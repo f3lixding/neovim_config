@@ -5,7 +5,6 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
 
   -- appearance related
   Plug 'morhetz/gruvbox'
-  Plug 'nvim-tree/nvim-web-devicons'
   Plug 'nvim-tree/nvim-tree.lua'
   Plug 'nvim-tree/nvim-web-devicons'
   Plug 'airblade/vim-gitgutter'
