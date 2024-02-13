@@ -1,3 +1,5 @@
+require("fd.settings")
+require("fd.mappings")
 require("fd.plugins")
 
 -- background color adjustment to see background picture
