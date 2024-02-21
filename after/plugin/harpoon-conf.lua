@@ -9,8 +9,8 @@ require("harpoon").setup({
 
 vim.keymap.set("n", "<leader>mm", "<cmd>lua require('harpoon.mark').add_file()<CR>", {noremap=true})
 vim.keymap.set("n", "<leader>uu", "<cmd>lua require('harpoon.ui').toggle_quick_menu()<CR>", {noremap=true})
-vim.keymap.set("n", "<leader>ne", "<cmd>lua require('harpoon.ui').nav_next()<CR>", {noremap=true})
-vim.keymap.set("n", "<leader>nw", "<cmd>lua require('harpoon.ui').nav_prev()<CR>", {noremap=true})
+vim.keymap.set("n", "<leader>ii", "<cmd>lua require('harpoon.ui').nav_next()<CR>", {noremap=true})
+vim.keymap.set("n", "<leader>oo", "<cmd>lua require('harpoon.ui').nav_prev()<CR>", {noremap=true})
 
 for i = 1, 9 do
   vim.keymap.set("n", "<leader>" .. i, "<cmd>lua require('harpoon.ui').nav_file(" .. i .. ")<CR>", {noremap=true})
