@@ -62,6 +62,11 @@ local on_attach = function(_, bufnr)
         end,
         { desc = 'Toggle Inlay Hints' }
     )
+
+    -- Set inlay on by default for everything other than rust
+    if vim.bo.filetype ~= 'rust' then
+      vim.lsp.inlay_hint.enable(0, true)
+    end
   end
 end
 
@@ -104,7 +109,10 @@ for _, lsp in ipairs(servers) do
     }
   elseif lsp == 'zls' then
     local zls_module = require('fd.plugin-conf.zls-conf')
-    zls_module.set_up(on_attach)
+    zls_module.set_up {
+        capabilities = capabilities,
+        on_attach_routine = on_attach,
+    }
   else
     nvim_lsp_config[lsp].setup {
         on_attach = on_attach,

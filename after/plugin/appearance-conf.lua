@@ -14,3 +14,10 @@ vim.api.nvim_set_hl(0, "LineNr", {fg = "#555555"})
 vim.api.nvim_set_hl(0, "WinSeparator", {fg = "#555555"})
 vim.g.gruvbox_number_column = 'bg0'
 vim.g.gruvbox_sign_column = 'bg0'
+
+-- Set background color for floating windows
+vim.api.nvim_set_hl(0, "NormalFloat", { bg = "NONE" })
+
+-- Set background and foreground (border color) for floating window borders
+vim.api.nvim_set_hl(0, "FloatBorder", { bg = "NONE", fg = "#ffffff" })
+
