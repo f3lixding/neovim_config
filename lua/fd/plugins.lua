@@ -24,6 +24,9 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   -- rust related
   Plug 'simrat39/rust-tools.nvim'
 
+  -- zig related
+  Plug 'ziglang/zig.vim'
+
   -- bracket auto completion
   Plug 'windwp/nvim-autopairs'
 
@@ -42,10 +45,3 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'rcarriga/nvim-dap-ui'
 
 vim.call('plug#end')
-
--- appearance settings
-vim.g.gruvbox_number_column = 'bg0'
-vim.g.gruvbox_sign_column = 'bg0'
--- vim.g.gruvbox_vert_split = 'bg0'
-vim.cmd("highlight link markdownError NONE") -- this is to disable markdown syntax checking https://old.reddit.com/r/neovim/comments/jmuxm0/help_seeing_red_blocks_in_hover_definitions/
-vim.cmd("colorscheme gruvbox")

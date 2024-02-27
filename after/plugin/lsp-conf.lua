@@ -58,7 +58,7 @@ local on_attach = function(_, bufnr)
         'n',
         '<leader>df',
         function()
-          vim.lsp.inlay_hint(0, nil)
+          vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
         end,
         { desc = 'Toggle Inlay Hints' }
     )
@@ -66,7 +66,7 @@ local on_attach = function(_, bufnr)
 end
 
 -- listing servers
-local servers = { 'rust_analyzer', 'lua_ls', 'clangd', 'pyright' }
+local servers = { 'rust_analyzer', 'lua_ls', 'clangd', 'pyright', 'zls' }
 
 -- prepare settings
 local gen_settings = function(server_name)
@@ -102,6 +102,9 @@ for _, lsp in ipairs(servers) do
         filetypes = { "c", "cpp", "objc", "objcpp" },
         capabilities = capabilities,
     }
+  elseif lsp == 'zls' then
+    local zls_module = require('fd.plugin-conf.zls-conf')
+    zls_module.set_up(on_attach)
   else
     nvim_lsp_config[lsp].setup {
         on_attach = on_attach,
