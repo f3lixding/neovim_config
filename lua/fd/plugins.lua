@@ -15,6 +15,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'hrsh7th/cmp-nvim-lsp'
   Plug 'hrsh7th/cmp-buffer'
   Plug 'hrsh7th/cmp-path'
+  Plug 'hrsh7th/cmp-nvim-lua'
   Plug 'hrsh7th/cmp-vsnip' -- snipping engine
   Plug 'hrsh7th/vim-vsnip' -- also for snipping engine
   Plug 'hrsh7th/cmp-nvim-lsp-signature-help' -- for function signature info
@@ -43,5 +44,12 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   -- Debugging
   Plug 'mfussenegger/nvim-dap'
   Plug 'rcarriga/nvim-dap-ui'
+  Plug 'nvim-neotest/nvim-nio'
+
+  -- terminal utils
+  Plug 'folke/noice.nvim'
+  Plug 'MunifTanjim/nui.nvim' -- this is required by noice
+  Plug 'rcarriga/nvim-notify'
+  Plug 'hrsh7th/cmp-cmdline'
 
 vim.call('plug#end')
