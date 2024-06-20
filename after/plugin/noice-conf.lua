@@ -3,10 +3,10 @@ require("noice").setup({
     -- you can enable a preset by setting it to true, or a table that will override the preset config
     -- you can also add custom presets that you can enable/disable with enabled=true
     bottom_search = false,        -- use a classic bottom cmdline for search
-    command_palette = true,      -- position the cmdline and popupmenu together
+    command_palette = true,       -- position the cmdline and popupmenu together
     long_message_to_split = true, -- long messages will be sent to a split
     inc_rename = true,            -- enables an input dialog for inc-rename.nvim
-    lsp_doc_border = true, -- add a border to hover docs and signature help
+    lsp_doc_border = true,        -- add a border to hover docs and signature help
   },
   lsp = {
     -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
@@ -48,4 +48,8 @@ require("noice").setup({
 
 require('notify').setup({
   background_colour = "#000000",
+  timeout = 3000,
+  fps = 60,
 })
+
+vim.api.nvim_set_keymap('n', '<leader>cn', '<cmd>lua require("notify").dismiss()<CR>', { noremap = true, silent = true })
