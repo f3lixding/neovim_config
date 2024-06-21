@@ -34,3 +34,5 @@ vim.opt.scrolloff = 8 -- Gives a bit of breathing room for scrolling
 vim.opt.signcolumn = 'yes' -- Dedicated column for linter messages
 vim.opt.cursorline = true -- Highlight the current row
 vim.opt.statusline = '%<%f' -- Customize the status line
+vim.opt.ignorecase = true -- Case insensitive search
+vim.opt.smartcase = true -- Case insensitive search
