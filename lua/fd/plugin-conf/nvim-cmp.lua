@@ -26,7 +26,7 @@ cmp.setup({
   sources = cmp.config.sources({
     { name = 'nvim_lsp' },
     { name = 'vsnip' },                   -- For vsnip users.
-    { name = 'nvim_lsp_signature_help' }, -- note that you would have to type out (manually) of the rest of funciton actually use this
+    -- { name = 'nvim_lsp_signature_help' }, -- note that you would have to type out (manually) of the rest of funciton actually use this
   }, {
     { name = 'buffer' },
   })

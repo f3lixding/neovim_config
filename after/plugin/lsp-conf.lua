@@ -13,23 +13,6 @@ local border_style = {
 -- Hover pop up window customization
 vim.cmd [[ hi Pmenu ctermbg=NONE guibg=NONE ]]
 
--- Overriding globally
-local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-  opts = opts or {}
-  opts.border = opts.border or border_style
-  return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end
-
--- Setup LSP handlers to use the custom border
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = border_style
-})
-
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-  border = border_style
-})
-
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
@@ -41,7 +24,7 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local capabilities = require('fd.plugin-conf.nvim-cmp')
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -67,14 +50,14 @@ local on_attach = function(_, bufnr)
         'n',
         '<leader>df',
         function()
-          vim.lsp.inlay_hint.enable(0, not vim.lsp.inlay_hint.is_enabled())
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
         end,
         { desc = 'Toggle Inlay Hints' }
     )
 
     -- Set inlay on by default for everything other than rust
     if vim.bo.filetype ~= 'rust' then
-      vim.lsp.inlay_hint.enable(0, true)
+      vim.lsp.inlay_hint.enable(true)
     end
   end
 end
