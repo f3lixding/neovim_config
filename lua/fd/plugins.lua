@@ -23,7 +23,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'rmagatti/goto-preview' -- pop up go to definition
 
   -- rust related
-  Plug 'simrat39/rust-tools.nvim'
+  Plug 'mrcjkb/rustaceanvim'
 
   -- zig related
   Plug 'ziglang/zig.vim'

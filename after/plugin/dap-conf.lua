@@ -33,8 +33,11 @@ for _, buf_type in ipairs(buffer_types) do
   }
 
   if buf_type == 'rust' or buf_type == 'c' or buf_type == 'cpp' then
+    local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/'
+    local codelldb_path = extension_path .. 'adapter/codelldb'
+    local liblldb_path = extension_path .. 'lldb/lib/liblldb'
     -- for now, because the only things I write are handled by lldb-vscode, so this will do.
-    dap.adapters[buf_type] = require('fd.plugin-conf.rust-tools-conf').dap
+    dap.adapters[buf_type] = require('rustaceanvim.config').get_codelldb_adapter(codelldb_path, liblldb_path)
   end
 end
 

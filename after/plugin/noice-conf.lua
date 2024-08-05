@@ -15,6 +15,9 @@ require("noice").setup({
       ["vim.lsp.util.stylize_markdown"] = true,
       ["cmp.entry.get_documentation"] = true,-- requires hrsh7th/nvim-cmp
     },
+    -- hover = {
+    --   enabled = false -- we want to use the rust lsp client's hover action only for rust files
+    -- }
   },
   views = {
     cmdline_popup = {

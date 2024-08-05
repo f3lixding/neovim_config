@@ -13,6 +13,23 @@ local border_style = {
 -- Hover pop up window customization
 vim.cmd [[ hi Pmenu ctermbg=NONE guibg=NONE ]]
 
+-- Override LSP border globally
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or border_style
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
+
+-- Setup LSP handlers to use the custom border
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+  border = border_style
+})
+
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+  border = border_style
+})
+
 -- Mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 local opts = { noremap = true, silent = true }
@@ -24,7 +41,7 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local capabilities = require('fd.plugin-conf.nvim-cmp')
-local on_attach = function(client, bufnr)
+local on_attach = function(_, bufnr)
   -- Mappings.
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
@@ -55,10 +72,8 @@ local on_attach = function(client, bufnr)
         { desc = 'Toggle Inlay Hints' }
     )
 
-    -- Set inlay on by default for everything other than rust
-    if vim.bo.filetype ~= 'rust' then
-      vim.lsp.inlay_hint.enable(true)
-    end
+    -- Set inlay on by default for everything
+    vim.lsp.inlay_hint.enable(true)
   end
 end
 
@@ -89,9 +104,43 @@ end
 -- calling setups
 local nvim_lsp_config = require('lspconfig')
 for _, lsp in ipairs(servers) do
-  if lsp == 'rust_analyzer' then -- we use rust tools to configure rust_analyzer
-    local rt_module = require('fd.plugin-conf.rust-tools-conf')
-    rt_module.set_up_rust_tools(on_attach)
+  if lsp == 'rust_analyzer' then
+    vim.g.rustaceanvim = function()
+      local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/'
+      local codelldb_path = extension_path .. 'adapter/codelldb'
+      local liblldb_path = extension_path .. 'lldb/lib/liblldb'
+      local this_os = vim.uv.os_uname().sysname;
+
+      -- The path is different on Windows
+      if this_os:find "Windows" then
+        codelldb_path = extension_path .. "adapter\\codelldb.exe"
+        liblldb_path = extension_path .. "lldb\\bin\\liblldb.dll"
+      else
+        -- The liblldb extension is .so for Linux and .dylib for MacOS
+        liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib")
+      end
+
+      local cfg = require('rustaceanvim.config')
+      return {
+        -- Plugin configuration
+        tools = {
+        },
+        -- LSP configuration
+        server = {
+          on_attach = on_attach,
+            -- you can also put keymaps in here
+          default_settings = {
+            -- rust-analyzer language server configuration
+            ['rust-analyzer'] = {
+            },
+          },
+        },
+        -- DAP configuration
+        dap = {
+          adapter = cfg.get_codelldb_adapter(codelldb_path, liblldb_path),
+        },
+      }
+    end
   elseif lsp == 'clangd' then
     nvim_lsp_config[lsp].setup {
         on_attach = on_attach,
