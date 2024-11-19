@@ -21,6 +21,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'hrsh7th/cmp-nvim-lsp-signature-help' -- for function signature info
   Plug 'nvim-treesitter/nvim-treesitter'
   Plug 'rmagatti/goto-preview' -- pop up go to definition
+  Plug 'stevearc/aerial.nvim' -- file symbol
 
   -- rust related
   Plug 'mrcjkb/rustaceanvim'
