@@ -55,7 +55,10 @@ for _, buf_type in ipairs(buffer_types) do
       end,
       cwd = '${workspaceFolder}',
       stopOnEntry = false,
-      args = {},
+      args = function()
+        local user_input = vim.fn.input("Arguments (separated by space): ")
+        return vim.split(user_input, " ")
+      end,
     } }
   end
 end
