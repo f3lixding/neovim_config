@@ -1,7 +1,11 @@
 {
     "diagnostics.globals": [
         "vim",
+        "rustfmt",
         "rustfmt"
     ],
-    "workspace.checkThirdParty": false
+    "workspace.checkThirdParty": false,
+    "diagnostics.disable": [
+        "duplicate-set-field"
+    ]
 }

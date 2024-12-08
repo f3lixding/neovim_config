@@ -17,10 +17,6 @@ function M.set_up(options)
       },
     },
     capabilities = options.capabilities,
-    on_attach = function(client, bufnr)
-      vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-      options.on_attach_routine(client, bufnr)
-    end
   }
 end
 
