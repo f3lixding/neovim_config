@@ -41,9 +41,87 @@ vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 -- Create autogroup for LSP configuration
 local lsp_group = vim.api.nvim_create_augroup('LspConfiguration', { clear = true })
 
+-- Lsp capabilities for lsp servers
+-- Track which servers have been set up
+local initialized_servers = {}
+
+-- Function to set up servers based on filetype
+vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+  group = setup_group,
+  callback = function(args)
+    local filetype = vim.filetype.match({ buf = args.buf }) or vim.bo[args.buf].filetype
+    
+    -- Don't set up if already initialized
+    -- if initialized_servers[filetype] then
+    --   return
+    -- end
+
+    local capabilities = require('fd.plugin-conf.nvim-cmp')
+    local nvim_lsp_config = require('lspconfig')
+
+    -- Set up the appropriate server based on filetype
+    if filetype == "rust" and not initialized_servers["rust"] then
+      initialized_servers["rust"] = true
+      vim.g.rustaceanvim = function()
+        local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/'
+        local codelldb_path = extension_path .. 'adapter/codelldb'
+        local liblldb_path = extension_path .. 'lldb/lib/liblldb'
+        local this_os = vim.uv.os_uname().sysname;
+
+        if this_os:find "Windows" then
+          codelldb_path = extension_path .. "adapter\\codelldb.exe"
+          liblldb_path = extension_path .. "lldb\\bin\\liblldb.dll"
+        else
+          liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib")
+        end
+        
+        local cfg = require('rustaceanvim.config')
+        return {
+          dap = {
+            adapter = cfg.get_codelldb_adapter(codelldb_path, liblldb_path),
+          },
+        }
+      end
+    elseif filetype == "c" or filetype == "cpp" and not initialized_servers["clangd"] then
+      initialized_servers["clangd"] = true
+      nvim_lsp_config.clangd.setup {
+        cmd = { "clangd", "--background-index" },
+        filetypes = { "c", "cpp", "objc", "objcpp" },
+        capabilities = capabilities,
+      }
+    elseif filetype == "zig" and not initialized_servers["zls"] then
+      initialized_servers["zls"] = true
+      local zls_module = require('fd.plugin-conf.zls-conf')
+      zls_module.set_up {
+        capabilities = capabilities,
+      }
+    elseif filetype == "python" and not initialized_servers["pyright"] then
+      initialized_servers["pyright"] = true
+      nvim_lsp_config.pyright.setup {
+        capabilities = capabilities,
+      }
+    elseif filetype == "lua" and not initialized_servers["lua_ls"] then
+      initialized_servers["lua_ls"] = true
+      nvim_lsp_config.lua_ls.setup {
+        capabilities = capabilities,
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { 'vim' },
+            },
+            hint = { enable = true },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+            },
+          }
+        }
+      }
+    end
+  end
+})
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local capabilities = require('fd.plugin-conf.nvim-cmp')
 local nvim_lsp_config = require('lspconfig')
 vim.api.nvim_create_autocmd('LspAttach', {
   group = lsp_group,
@@ -84,61 +162,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
       )
       -- Set inlay on by default for everything
       vim.lsp.inlay_hint.enable(true)
-    end
-
-    -- Lsp capabilities set up
-    local client_id = args.data.client_id
-    if client_id == "rust_analzyer" then
-      vim.g.rustaceanvim = function()
-        local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/'
-        local codelldb_path = extension_path .. 'adapter/codelldb'
-        local liblldb_path = extension_path .. 'lldb/lib/liblldb'
-        local this_os = vim.uv.os_uname().sysname;
-        -- The path is different on Windows
-        if this_os:find "Windows" then
-          codelldb_path = extension_path .. "adapter\\codelldb.exe"
-          liblldb_path = extension_path .. "lldb\\bin\\liblldb.dll"
-        else
-          -- The liblldb extension is .so for Linux and .dylib for MacOS
-          liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib")
-        end
-        local cfg = require('rustaceanvim.config')
-        return {
-          -- DAP configuration
-          dap = {
-            adapter = cfg.get_codelldb_adapter(codelldb_path, liblldb_path),
-          },
-        }
-      end
-    elseif client_id == "clangd" then
-      nvim_lsp_config["clangd"].setup {
-        cmd = { "clangd", "--background-index" },
-        filetypes = { "c", "cpp", "objc", "objcpp" },
-        capabilities = capabilities,
-      }
-    elseif client_id == "zls" then
-      local zls_module = require('fd.plugin-conf.zls-conf')
-      zls_module.set_up {
-        capabilities = capabilities,
-      }
-    elseif client_id == "pyright" then
-    elseif client_id == "lua_ls" then
-      nvim_lsp_config["lua_ls"].setup {
-        capabilities = capabilities,
-        settings = {
-          Lua = {
-            diagnostics = {
-              -- Get the language server to recognize the `vim` global
-              globals = { 'vim' },
-            },
-            hint = { enable = true },
-            workspace = {
-              -- Make the server aware of Neovim runtime files to provide settings for `vim` API, etc.
-              library = vim.api.nvim_get_runtime_file("", true),
-            },
-          }
-        }
-      }
     end
   end
 })
