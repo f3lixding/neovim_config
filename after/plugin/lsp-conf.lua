@@ -50,11 +50,10 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   group = setup_group,
   callback = function(args)
     local filetype = vim.filetype.match({ buf = args.buf }) or vim.bo[args.buf].filetype
-    
     -- Don't set up if already initialized
-    -- if initialized_servers[filetype] then
-    --   return
-    -- end
+    if initialized_servers[filetype] then
+      return
+    end
 
     local capabilities = require('fd.plugin-conf.nvim-cmp')
     local nvim_lsp_config = require('lspconfig')
@@ -74,7 +73,6 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
         else
           liblldb_path = liblldb_path .. (this_os == "Linux" and ".so" or ".dylib")
         end
-        
         local cfg = require('rustaceanvim.config')
         return {
           dap = {
