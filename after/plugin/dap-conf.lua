@@ -8,7 +8,6 @@ vim.keymap.set('n', '<leader>dc', require('dap').disconnect)
 
 -- Configs for attaching to process
 local dap = require('dap')
-local buffer_types = { 'rust', 'c', 'cpp', 'zig' }
 
 local extension_path = vim.env.HOME .. '/.vscode/extensions/vadimcn.vscode-lldb-1.10.0/'
 local codelldb_path = extension_path .. 'adapter/codelldb'
@@ -20,48 +19,64 @@ dap.adapters.lldb = {
   name = 'lldb',
 }
 
-for _, buf_type in ipairs(buffer_types) do
-  dap.configurations[buf_type] = {
-    {
-      -- If you get an "Operation not permitted" error using this, try disabling YAMA:
-      --  echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
-      name = "Attach to process",
-      type = buf_type, -- Adjust this to match your adapter name (`dap.adapters.<name>`)
-      request = 'attach',
-      pid = require('dap.utils').pick_process,
-      args = {},
-    },
-    {
-      name = "Launch a process",
-      type = buf_type, -- Adjust this to match your adapter name (`dap.adapters.<name>`)
-      request = 'launch',
-      program = function()
-        return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-      end,
-      args = {},
-    },
-  }
-
-  if buf_type == 'rust' or buf_type == 'c' or buf_type == 'cpp' then
-    -- for now, because the only things I write are handled by lldb-vscode, so this will do.
-    dap.adapters[buf_type] = require('rustaceanvim.config').get_codelldb_adapter(codelldb_path, liblldb_path)
-  elseif buf_type == 'zig' then
-    dap.configurations[buf_type] = { {
-      name = 'Launch',
-      type = 'lldb',
-      request = 'launch',
-      program = function()
-        return vim.fn.input('Path to binary: ', vim.fn.getcwd() .. '/', 'file')
-      end,
-      cwd = '${workspaceFolder}',
-      stopOnEntry = false,
-      args = function()
-        local user_input = vim.fn.input("Arguments (separated by space): ")
-        return user_input
-      end,
-    } }
+local initialized = {};
+local dap_group = vim.api.nvim_create_augroup('DapConfigurations', { clear = true })
+vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
+  group = dap_group,
+  callback = function(args)
+    local filetype = vim.filetype.match({ buf = args.buf }) or vim.bo[args.buf].filetype
+    if initialized[filetype] then
+      return
+    end
+    if filetype == 'rust' or filetype == 'c' or filetype == 'cpp' then
+      -- for now, because the only things I write are handled by lldb-vscode, so this will do.
+      dap.adapters[filetype] = require('rustaceanvim.config').get_codelldb_adapter(codelldb_path, liblldb_path)
+    elseif filetype == 'typescript' then
+      local port = 9229
+      require("dap").adapters["pwa-node"] = {
+        type = "server",
+        host = "localhost",
+        port = port,
+        executable = {
+          command = "node",
+          args = { "/Users/felixding/dev/js-debug/src/dapDebugServer.js", tostring(port)},
+        }
+      }
+      require("dap").configurations.typescript = {
+        {
+          type = "pwa-node",
+          request = "launch",
+          name = "Launch file",
+          program = "${file}",
+          cwd = "${workspaceFolder}",
+        },
+        {
+          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+          name = 'Attach to process',
+          type = 'pwa-node',
+          request = 'attach',
+          processId = require 'dap.utils'.pick_process,
+        },
+      }
+    elseif filetype == 'zig' then
+      dap.configurations[filetype] = { {
+        name = 'Launch',
+        type = 'lldb',
+        request = 'launch',
+        program = function()
+          return vim.fn.input('Path to binary: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        cwd = '${workspaceFolder}',
+        stopOnEntry = false,
+        args = function()
+          local user_input = vim.fn.input("Arguments (separated by space): ")
+          return user_input
+        end,
+      } }
+    end
+    initialized[filetype] = true
   end
-end
+})
 
 -- dap ui
 vim.keymap.set('n', '<leader>du', require('dapui').toggle)
