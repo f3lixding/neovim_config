@@ -98,7 +98,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       nvim_lsp_config.pyright.setup {
         capabilities = capabilities,
       }
-    elseif filetype == "ts" and not initialized_servers["tsserver"] then
+    elseif filetype == "typescript" and not initialized_servers["tsserver"] then
       initialized_servers["tsserver"] = true
       nvim_lsp_config.tsserver.setup {
         capabilities = capabilities,
