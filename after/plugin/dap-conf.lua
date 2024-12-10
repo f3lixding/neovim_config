@@ -57,7 +57,7 @@ for _, buf_type in ipairs(buffer_types) do
       stopOnEntry = false,
       args = function()
         local user_input = vim.fn.input("Arguments (separated by space): ")
-        return vim.split(user_input, " ")
+        return user_input
       end,
     } }
   end
