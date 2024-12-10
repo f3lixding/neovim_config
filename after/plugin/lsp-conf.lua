@@ -47,7 +47,7 @@ local initialized_servers = {}
 
 -- Function to set up servers based on filetype
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
-  group = setup_group,
+  group = lsp_group,
   callback = function(args)
     local filetype = vim.filetype.match({ buf = args.buf }) or vim.bo[args.buf].filetype
     -- Don't set up if already initialized
