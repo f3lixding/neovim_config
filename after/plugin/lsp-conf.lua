@@ -98,6 +98,11 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       nvim_lsp_config.pyright.setup {
         capabilities = capabilities,
       }
+    elseif filetype == "ts" and not initialized_servers["tsserver"] then
+      initialized_servers["tsserver"] = true
+      nvim_lsp_config.tsserver.setup {
+        capabilities = capabilities,
+      }
     elseif filetype == "lua" and not initialized_servers["lua_ls"] then
       initialized_servers["lua_ls"] = true
       nvim_lsp_config.lua_ls.setup {
