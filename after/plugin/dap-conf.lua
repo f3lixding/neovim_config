@@ -55,9 +55,16 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
           name = 'Attach to process',
           type = 'pwa-node',
           request = 'attach',
+          port = port,
           processId = function()
             return vim.fn.input('Enter the PID of the process to attach to: ')
           end,
+          resolveSourceMapLocations = {
+            "${workspaceFolder}/dist/**/*.js",
+            "${workspaceFolder}/dist/**/*.js.map",
+            "${workspaceFolder}/src/**/*.ts"
+          },
+          sourceMaps = true,
         },
       }
     elseif filetype == 'zig' then
