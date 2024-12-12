@@ -55,7 +55,9 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
           name = 'Attach to process',
           type = 'pwa-node',
           request = 'attach',
-          processId = require 'dap.utils'.pick_process,
+          processId = function()
+            return vim.fn.input('Enter the PID of the process to attach to: ')
+          end,
         },
       }
     elseif filetype == 'zig' then
