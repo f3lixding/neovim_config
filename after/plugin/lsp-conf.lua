@@ -165,6 +165,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
       )
       -- Set inlay on by default for everything
       vim.lsp.inlay_hint.enable(true)
+      vim.api.nvim_set_hl(0, "LspInlayHint", {
+        fg = "#808080",
+      })
     end
   end
 })
