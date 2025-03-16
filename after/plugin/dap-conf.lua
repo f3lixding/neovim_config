@@ -39,7 +39,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
         port = port,
         executable = {
           command = "node",
-          args = { "/Users/felixding/dev/js-debug/src/dapDebugServer.js", tostring(port)},
+          args = { "/Users/felixding/dev/js-debug/src/dapDebugServer.js", tostring(port) },
         }
       }
       require("dap").configurations.typescript = {
@@ -63,7 +63,7 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
           resolveSourceMapLocations = {
             '${workspaceFolder}/dist/**/*.js',
             '${workspaceFolder}/dist/**/*.js.map',
-            '!**/node_modules/**'  -- Explicitly exclude node_modules
+            '!**/node_modules/**' -- Explicitly exclude node_modules
           },
           sourceMapPathOverrides = {
             ["../src/*"] = "${workspaceFolder}/src/*"
@@ -74,20 +74,48 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
         },
       }
     elseif filetype == 'zig' then
-      dap.configurations[filetype] = { {
-        name = 'Launch',
-        type = 'lldb',
-        request = 'launch',
-        program = function()
-          return vim.fn.input('Path to binary: ', vim.fn.getcwd() .. '/', 'file')
-        end,
-        cwd = '${workspaceFolder}',
-        stopOnEntry = false,
-        args = function()
-          local user_input = vim.fn.input("Arguments (separated by space): ")
-          return user_input
-        end,
-      } }
+      dap.configurations[filetype] = {
+        {
+          name = 'Attach to process',
+          type = 'lldb',
+          request = 'attach',
+          pid = function()
+            return tonumber(vim.fn.input('PID: '))
+          end,
+        },
+        {
+          name = 'Auto attach',
+          type = 'lldb',
+          request = 'attach',
+          pid = function()
+            local signal_file_root = "/tmp";
+            local file_pid_path = signal_file_root .. "/.pid";
+            local file_pid = io.open(file_pid_path, "r");
+            if file_pid then
+              local pid = file_pid:read("a");
+              print("pid is:" .. pid);
+              file_pid:close();
+              io.open(signal_file_root .. "/.ready", "w"):close();
+              return tonumber(pid);
+            end
+            return tonumber(vim.fn.input('PID: '))
+          end,
+        },
+        {
+          name = 'Launch',
+          type = 'lldb',
+          request = 'launch',
+          program = function()
+            return vim.fn.input('Path to binary: ', vim.fn.getcwd() .. '/', 'file')
+          end,
+          cwd = '${workspaceFolder}',
+          stopOnEntry = false,
+          args = function()
+            local user_input = vim.fn.input("Arguments (separated by space): ")
+            return user_input
+          end,
+        },
+      }
     end
     initialized[filetype] = true
   end
