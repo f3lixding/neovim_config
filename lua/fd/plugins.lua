@@ -8,6 +8,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug 'nvim-tree/nvim-tree.lua'
   Plug 'nvim-tree/nvim-web-devicons'
   Plug 'airblade/vim-gitgutter'
+  Plug 'max397574/startup.nvim'
 
   -- lsp and autocomplete
   Plug 'neovim/nvim-lspconfig'
