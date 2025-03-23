@@ -40,7 +40,11 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
   Plug('nvim-telescope/telescope-fzf-native.nvim', { ['do'] = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' })
 
   -- AI assistant
-  Plug 'Exafunction/codeium.vim'
+  Plug 'stevearc/dressing.nvim'
+  Plug 'MeanderingProgrammer/render-markdown.nvim'
+  Plug 'HakonHarnes/img-clip.nvim'
+  Plug 'zbirenbaum/copilot.lua'
+  Plug('yetone/avante.nvim', { ['branch'] = 'main', ['do'] = 'make' })
 
   -- Debugging
   Plug 'mfussenegger/nvim-dap'
