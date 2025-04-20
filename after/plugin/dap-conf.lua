@@ -5,6 +5,9 @@ vim.keymap.set('n', '<leader>do', require('dap').step_over)
 vim.keymap.set('n', '<leader>di', require('dap').step_into)
 vim.keymap.set('n', '<leader>dx', require('dap').close)
 vim.keymap.set('n', '<leader>dc', require('dap').disconnect)
+vim.keymap.set('n', 'K', function()
+  require('dap.ui.widgets').hover()
+end, { desc = 'Debug: Hover variable value' })
 
 -- Configs for attaching to process
 local dap = require('dap')
