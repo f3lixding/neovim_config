@@ -25,6 +25,7 @@ require('telescope').setup {
         ["<C-k>"] = actions.cycle_history_prev,
         ["<C-w>"] = actions.send_selected_to_qflist + actions.open_qflist,
         ["<C-d>d"] = actions.delete_buffer,
+        ["<C-f>"] = actions.to_fuzzy_refine,
       }
     },
   },
