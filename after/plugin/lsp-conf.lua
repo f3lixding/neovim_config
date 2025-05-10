@@ -38,6 +38,35 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
+-- Diagnostic display
+vim.diagnostic.config({
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = "󰅚", -- Error sign
+      [vim.diagnostic.severity.WARN] = "󰀪",  -- Warning sign
+      [vim.diagnostic.severity.INFO] = "󰋽",  -- Info sign
+      [vim.diagnostic.severity.HINT] = "󰌶",  -- Hint sign
+    },
+    numhl = {
+      [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+      [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+      [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+      [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+    },
+    linehl = {},
+    texthl = {
+      [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+      [vim.diagnostic.severity.WARN] = "DiagnosticSignWarn",
+      [vim.diagnostic.severity.INFO] = "DiagnosticSignInfo",
+      [vim.diagnostic.severity.HINT] = "DiagnosticSignHint",
+    },
+    priority = 20,
+  },
+  virtual_text = true,  -- Also re-enable virtual text as we discussed earlier
+  underline = true,
+  severity_sort = true,
+})
+
 -- Create autogroup for LSP configuration
 local lsp_group = vim.api.nvim_create_augroup('LspConfiguration', { clear = true })
 
