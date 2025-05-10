@@ -43,9 +43,9 @@ vim.diagnostic.config({
   signs = {
     text = {
       [vim.diagnostic.severity.ERROR] = "󰅚", -- Error sign
-      [vim.diagnostic.severity.WARN] = "󰀪",  -- Warning sign
-      [vim.diagnostic.severity.INFO] = "󰋽",  -- Info sign
-      [vim.diagnostic.severity.HINT] = "󰌶",  -- Hint sign
+      [vim.diagnostic.severity.WARN] = "󰀪", -- Warning sign
+      [vim.diagnostic.severity.INFO] = "󰋽", -- Info sign
+      [vim.diagnostic.severity.HINT] = "󰌶", -- Hint sign
     },
     numhl = {
       [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
@@ -62,7 +62,7 @@ vim.diagnostic.config({
     },
     priority = 20,
   },
-  virtual_text = true,  -- Also re-enable virtual text as we discussed earlier
+  virtual_text = true, -- Also re-enable virtual text as we discussed earlier
   underline = true,
   severity_sort = true,
 })
@@ -154,7 +154,6 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local nvim_lsp_config = require('lspconfig')
 vim.api.nvim_create_autocmd('LspAttach', {
   group = lsp_group,
   callback = function(args)
@@ -202,25 +201,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 -- BufPreWrite formatting
-local formatters = {
-  ['.rs'] = function(bufnr)
-    vim.api.nvim_command('write')
-    vim.fn.system('cargo +nightly fmt -- ' .. vim.fn.fnameescape(vim.api.nvim_buf_get_name(bufnr)))
-    vim.api.nvim_command('edit')
+local format_group = vim.api.nvim_create_augroup("LspFormatting", { clear = true })
+vim.api.nvim_create_autocmd("BufWritePre", {
+  group = format_group,
+  pattern = "*",
+  callback = function(args)
+    vim.lsp.buf.format({ async = false, bufnr = args.buf })
   end,
-  ['.zig'] = function(bufnr)
-    vim.api.nvim_command('write')
-    vim.fn.system('zig fmt ' .. vim.fn.fnameescape(vim.api.nvim_buf_get_name(bufnr)))
-    vim.api.nvim_command('edit')
-  end
-}
-for ext, formatter in pairs(formatters) do
-  vim.api.nvim_create_autocmd('BufWritePre', {
-    pattern = '*' .. ext,
-    group = lsp_group,
-    callback = function()
-      local bufnr = vim.api.nvim_get_current_buf()
-      formatter(bufnr)
-    end
-  })
-end
+})
