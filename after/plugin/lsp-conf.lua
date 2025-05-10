@@ -176,7 +176,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
 local formatters = {
   ['.rs'] = function(bufnr)
     vim.api.nvim_command('write')
-    vim.fn.system('rustfmt --edition 2021 ' .. vim.fn.fnameescape(vim.api.nvim_buf_get_name(bufnr)))
+    vim.fn.system('cargo +nightly fmt -- ' .. vim.fn.fnameescape(vim.api.nvim_buf_get_name(bufnr)))
     vim.api.nvim_command('edit')
   end,
   ['.zig'] = function(bufnr)
