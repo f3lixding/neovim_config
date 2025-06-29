@@ -7,21 +7,21 @@ require('avante').setup({
       api_key_name = 'CODESTRAL_API_KEY',     -- Your Codestral API key
       model = 'codestral-latest',             -- Codestral model
       temperature = 0,
-      max_tokens = 4096,
+      max_tokens = 8192,
     },
     ["claude-haiku"] = {
       __inherited_from = "claude",
       model = "claude-3-5-haiku-20241022",
       timeout = 30000, -- Timeout in milliseconds
       temperature = 0,
-      max_tokens = 8192,
+      max_tokens = 16384,
     },
   },
   claude = {
     endpoint = "https://api.anthropic.com",
     model = "claude-sonnet-4-20250514",
     temperature = 0,
-    max_tokens = 4096,
+    max_tokens = 8192,
   },
   mappings = {
     suggestion = {
