@@ -85,7 +85,6 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
     end
 
     local capabilities = require('fd.plugin-conf.nvim-cmp')
-    local nvim_lsp_config = require('lspconfig')
 
     -- Set up the appropriate server based on filetype
     if filetype == "rust" and not initialized_servers["rust"] then
@@ -111,11 +110,12 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       end
     elseif filetype == "c" or filetype == "cpp" and not initialized_servers["clangd"] then
       initialized_servers["clangd"] = true
-      nvim_lsp_config.clangd.setup {
+      vim.lsp.config('clangd', {
         cmd = { "clangd", "--background-index" },
         filetypes = { "c", "cpp", "objc", "objcpp" },
         capabilities = capabilities,
-      }
+      })
+      vim.lsp.enable('clangd')
     elseif filetype == "zig" and not initialized_servers["zls"] then
       initialized_servers["zls"] = true
       local zls_module = require('fd.plugin-conf.zls-conf')
@@ -124,17 +124,19 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       }
     elseif filetype == "python" and not initialized_servers["pyright"] then
       initialized_servers["pyright"] = true
-      nvim_lsp_config.pyright.setup {
+      vim.lsp.config('pyright', {
         capabilities = capabilities,
-      }
+      })
+      vim.lsp.enable('pyright')
     elseif filetype == "typescript" and not initialized_servers["ts_ls"] then
       initialized_servers["ts_ls"] = true
-      nvim_lsp_config.ts_ls.setup {
+      vim.lsp.config('ts_ls', {
         capabilities = capabilities,
-      }
+      })
+      vim.lsp.enable('ts_ls')
     elseif filetype == "lua" and not initialized_servers["lua_ls"] then
       initialized_servers["lua_ls"] = true
-      nvim_lsp_config.lua_ls.setup {
+      vim.lsp.config('lua_ls', {
         capabilities = capabilities,
         settings = {
           Lua = {
@@ -147,7 +149,8 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
             },
           }
         }
-      }
+      })
+      vim.lsp.enable('lua_ls')
     end
   end
 })

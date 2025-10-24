@@ -1,7 +1,7 @@
 local M = {}
 
 function M.set_up(options)
-  require("lspconfig").zls.setup {
+  vim.lsp.config('zls', {
     settings = {
       zls = {
         -- Ensure this matches the zls configuration for inlay hints
@@ -17,7 +17,8 @@ function M.set_up(options)
       },
     },
     capabilities = options.capabilities,
-  }
+  })
+  vim.lsp.enable('zls')
 end
 
 return M
