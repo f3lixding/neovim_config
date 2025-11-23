@@ -151,6 +151,12 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
         }
       })
       vim.lsp.enable('lua_ls')
+    elseif filetype == "nix" and not initialized_servers["nixd"] then
+      initialized_servers["nixd"] = true
+      vim.lsp.config('nixd', {
+        capabilities = capabilities
+      })
+      vim.lsp.enable('nixd')
     end
   end
 })
