@@ -6,4 +6,4 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 -- This call is a noop once these parsers are installed once
-require 'nvim-treesitter'.install { 'rust', 'javascript', 'zig', 'lua', 'typescript' }
+require 'nvim-treesitter'.install { 'rust', 'javascript', 'zig', 'lua', 'typescript', 'nix', 'bash' }
