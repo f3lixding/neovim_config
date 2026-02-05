@@ -10,6 +10,9 @@ local border_style = {
   { "│", "FloatBorder" }
 }
 
+-- Ensure FloatBorder highlight is set
+vim.api.nvim_set_hl(0, "FloatBorder", { bg = "NONE", fg = "#ffffff" })
+
 -- Hover pop up window customization
 vim.cmd [[ hi Pmenu ctermbg=NONE guibg=NONE ]]
 

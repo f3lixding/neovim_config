@@ -4,6 +4,9 @@ local cmp = require 'cmp'
 -- for details see https://neovim.io/doc/user/options.html and search for cot
 vim.api.nvim_command('set cot=menu,menuone,noselect')
 
+-- Ensure FloatBorder is visible for cmp
+vim.api.nvim_set_hl(0, "FloatBorder", { bg = "NONE", fg = "#ffffff" })
+
 -- setup
 cmp.setup({
   snippet = {
@@ -13,8 +16,14 @@ cmp.setup({
     end,
   },
   window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
+    completion = cmp.config.window.bordered({
+      border = 'rounded',
+      winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+    }),
+    documentation = cmp.config.window.bordered({
+      border = 'rounded',
+      winhighlight = 'Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None',
+    }),
   },
   mapping = cmp.mapping.preset.insert({
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
