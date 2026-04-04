@@ -55,3 +55,6 @@ Plug 'rcarriga/nvim-notify'
 Plug 'hrsh7th/cmp-cmdline'
 
 vim.call('plug#end')
+
+-- Built-in optional packages from Neovim itself.
+vim.cmd('packadd! nvim.undotree')

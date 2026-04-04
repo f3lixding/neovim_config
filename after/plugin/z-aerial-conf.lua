@@ -1,5 +1,7 @@
 require("aerial").setup({
-  backends = { "treesitter", "lsp", "markdown" },
+  -- `aerial.nvim`'s treesitter backend is currently tripping over Neovim 0.12's
+  -- parser/query API shape, so prefer the stable backends for now.
+  backends = { "lsp", "markdown", "asciidoc", "man" },
   -- optionally use on_attach to set keymaps when aerial has attached to a buffer
   on_attach = function(bufnr)
     -- Jump forwards/backwards with '{' and '}'

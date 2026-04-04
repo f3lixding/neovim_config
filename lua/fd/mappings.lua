@@ -34,3 +34,6 @@ vim.api.nvim_set_keymap('n', '<leader>tj', '<cmd>bo split<CR><cmd>term<CR><cmd>r
 vim.api.nvim_set_keymap('n', '<leader>fe', ':NvimTreeToggle<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>r', ':NvimTreeRefresh<CR>', { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>n', ':NvimTreeFindFile<CR>', { noremap = true })
+
+-- Built-in undo tree
+vim.api.nvim_set_keymap('n', '<leader>ud', ':Undotree<CR>', { noremap = true, silent = true })
