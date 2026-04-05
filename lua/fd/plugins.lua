@@ -43,6 +43,9 @@ Plug('nvim-telescope/telescope-fzf-native.nvim',
     'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
   })
 
+-- markdown rendering
+Plug 'MeanderingProgrammer/render-markdown.nvim'
+
 -- Debugging
 Plug 'mfussenegger/nvim-dap'
 Plug 'rcarriga/nvim-dap-ui'
