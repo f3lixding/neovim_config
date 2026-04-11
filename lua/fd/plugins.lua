@@ -8,6 +8,7 @@ Plug 'morhetz/gruvbox'
 Plug 'nvim-tree/nvim-tree.lua'
 Plug 'nvim-tree/nvim-web-devicons'
 Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
 
 -- lsp and autocomplete
 Plug 'neovim/nvim-lspconfig'
