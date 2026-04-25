@@ -77,6 +77,17 @@ local lsp_group = vim.api.nvim_create_augroup('LspConfiguration', { clear = true
 -- Track which servers have been set up
 local initialized_servers = {}
 
+local function clangd_command()
+  local cmd = { "clangd", "--background-index", "--clang-tidy" }
+  local query_driver = vim.env.CLANGD_QUERY_DRIVER
+
+  if query_driver ~= nil and query_driver ~= "" then
+    table.insert(cmd, "--query-driver=" .. query_driver)
+  end
+
+  return cmd
+end
+
 -- Function to set up servers based on filetype
 vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
   group = lsp_group,
@@ -111,10 +122,12 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
           },
         }
       end
-    elseif filetype == "c" or filetype == "cpp" and not initialized_servers["clangd"] then
+    elseif (filetype == "c" or filetype == "cpp" or filetype == "objc" or filetype == "objcpp")
+        and not initialized_servers["clangd"] then
       initialized_servers["clangd"] = true
       vim.lsp.config('clangd', {
-        cmd = { "clangd", "--background-index" },
+        cmd = clangd_command(),
+        root_markers = { '.clangd', 'compile_commands.json', 'compile_flags.txt', '.git' },
         filetypes = { "c", "cpp", "objc", "objcpp" },
         capabilities = capabilities,
       })
@@ -157,7 +170,19 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
     elseif filetype == "nix" and not initialized_servers["nixd"] then
       initialized_servers["nixd"] = true
       vim.lsp.config('nixd', {
-        capabilities = capabilities
+        capabilities = capabilities,
+        settings = {
+          nixd = {
+            nixpkgs = {
+              expr = [[import (builtins.getFlake "/home/felix/.config/dotfiles/nix").inputs.nixpkgs.outPath {
+                system = builtins.currentSystem;
+              }]],
+            },
+            formatting = {
+              command = { "nixfmt" },
+            },
+          },
+        }
       })
       vim.lsp.enable('nixd')
     end
