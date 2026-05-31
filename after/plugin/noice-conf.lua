@@ -9,6 +9,11 @@ require("noice").setup({
     lsp_doc_border = true,        -- add a border to hover docs and signature help
   },
   lsp = {
+    progress = {
+      enabled = true,
+      throttle = 500,
+      view = "lsp_progress",
+    },
     -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
     override = {
       ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -20,6 +25,13 @@ require("noice").setup({
     -- }
   },
   views = {
+    lsp_progress = {
+      view = "mini",
+      timeout = 1000,
+      size = {
+        max_height = 1,
+      },
+    },
     cmdline_popup = {
       position = {
         row = "50%",

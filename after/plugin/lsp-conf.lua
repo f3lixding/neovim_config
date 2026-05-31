@@ -169,20 +169,62 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
       vim.lsp.enable('lua_ls')
     elseif filetype == "nix" and not initialized_servers["nixd"] then
       initialized_servers["nixd"] = true
-      vim.lsp.config('nixd', {
-        capabilities = capabilities,
-        settings = {
+      local fallback_flake_root = "/home/felix/.config/dotfiles/nix"
+
+      local function nix_string(value)
+        return string.format("%q", value)
+      end
+
+      local function nixd_settings(root_dir)
+        local flake_root = root_dir
+        if flake_root == nil or vim.uv.fs_stat(flake_root .. "/flake.nix") == nil then
+          flake_root = fallback_flake_root
+        end
+
+        local flake = "builtins.getFlake " .. nix_string(flake_root)
+        local fallback_flake = "builtins.getFlake " .. nix_string(fallback_flake_root)
+        local nixpkgs_expr = [[
+          let
+            flake = ]] .. flake .. [[;
+            fallback = ]] .. fallback_flake .. [[;
+            nixpkgs = if flake.inputs ? nixpkgs then flake.inputs.nixpkgs else fallback.inputs.nixpkgs;
+          in import nixpkgs.outPath { system = builtins.currentSystem; }
+        ]]
+        local nixos_options_expr = [[
+          let
+            flake = ]] .. flake .. [[;
+          in if flake ? nixosConfigurations && flake.nixosConfigurations ? nixos
+             then flake.nixosConfigurations.nixos.options
+             else {}
+        ]]
+
+        return {
           nixd = {
             nixpkgs = {
-              expr = [[import (builtins.getFlake "/home/felix/.config/dotfiles/nix").inputs.nixpkgs.outPath {
-                system = builtins.currentSystem;
-              }]],
+              expr = nixpkgs_expr,
+            },
+            options = {
+              nixos = {
+                expr = nixos_options_expr,
+              },
             },
             formatting = {
               command = { "nixfmt" },
             },
           },
         }
+      end
+
+      vim.lsp.config('nixd', {
+        cmd = { "nixd", "--inlay-hints=false" },
+        root_dir = function(bufnr, on_dir)
+          on_dir(vim.fs.root(bufnr, { "flake.nix", ".git" }) or vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
+        end,
+        capabilities = capabilities,
+        settings = nixd_settings(fallback_flake_root),
+        before_init = function(_, config)
+          config.settings = nixd_settings(config.root_dir)
+        end,
       })
       vim.lsp.enable('nixd')
     end
@@ -198,6 +240,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     local client = vim.lsp.get_client_by_id(args.data.client_id)
     if client == nil then
       return
+    end
+
+    if client.name == "nixd" then
+      client.server_capabilities.inlayHintProvider = false
     end
 
     -- Buffer local mappings
@@ -243,6 +289,9 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   group = format_group,
   pattern = "*",
   callback = function(args)
+    if vim.bo[args.buf].filetype == "zig" then
+      return
+    end
     vim.lsp.buf.format({ async = false, bufnr = args.buf })
   end,
 })
