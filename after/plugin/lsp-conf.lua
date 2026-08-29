@@ -1,3 +1,11 @@
+-- GDScript filetype detection. Neovim does not detect .gd by default here.
+vim.filetype.add({
+  extension = {
+    gd = "gdscript",
+    gdshaderinc = "gdshader",
+  },
+})
+
 -- Border style
 local border_style = {
   { "╭", "FloatBorder" },
@@ -222,11 +230,20 @@ vim.api.nvim_create_autocmd({ 'BufReadPre', 'BufNewFile' }, {
         end,
         capabilities = capabilities,
         settings = nixd_settings(fallback_flake_root),
-        before_init = function(_, config)
-          config.settings = nixd_settings(config.root_dir)
+        on_new_config = function(config, root_dir)
+          config.settings = nixd_settings(root_dir)
         end,
       })
       vim.lsp.enable('nixd')
+    elseif filetype == "gdscript" and not initialized_servers["gdscript"] then
+      initialized_servers["gdscript"] = true
+      vim.lsp.config("gdscript", {
+        cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
+        filetypes = { "gdscript" },
+        root_markers = { "project.godot", ".git" },
+        capabilities = capabilities,
+      })
+      vim.lsp.enable("gdscript")
     end
   end
 })
